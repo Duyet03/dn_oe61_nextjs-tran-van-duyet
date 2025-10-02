@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,12 +23,71 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Menu items cho dashboard
+  const dashboardMenuItems = [
+    { href: "/", label: "Home" },
+    { href: "/posts", label: "Posts" },
+    { href: "/users", label: "Users" },
+  ];
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning={true}
       >
-        {children}
+        <div className="min-h-screen flex flex-col bg-gray-50">
+          {/* Top Header */}
+          <header className="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white p-4 shadow-lg">
+            <div className="flex justify-between items-center">
+              <h1 className="text-2xl font-extrabold tracking-wide">
+                Blog Admin Panel
+              </h1>
+              <div className="flex space-x-3">
+                <Link
+                  href="/login"
+                  className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-medium transition-all duration-200 backdrop-blur-sm border border-white/20"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg font-medium transition-all duration-200 backdrop-blur-sm border border-white/20"
+                >
+                  Register
+                </Link>
+              </div>
+            </div>
+          </header>
+
+          {/* Menu Navigation */}
+          <nav className="bg-white border-b border-gray-200 p-4 shadow-sm">
+            <div className="flex justify-center">
+              <ul className="flex space-x-8">
+                {dashboardMenuItems.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="px-4 py-2 font-semibold text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all duration-200"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </nav>
+
+          {/* Main Content */}
+          <main className="flex-1 p-6">
+            <div className="bg-white rounded-lg shadow-sm p-6">{children}</div>
+          </main>
+
+          {/* Bottom Footer */}
+          <footer className="bg-white text-gray-500 p-4 text-center border-t border-gray-200">
+            <p>&copy; 2024 Blog Admin. All rights reserved.</p>
+          </footer>
+        </div>
       </body>
     </html>
   );
